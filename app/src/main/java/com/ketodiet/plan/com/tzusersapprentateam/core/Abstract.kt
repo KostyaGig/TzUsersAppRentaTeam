@@ -26,6 +26,8 @@ interface Abstract {
 
         fun map(users: List<BaseUser>) : T
 
+        fun cacheMap(users: List<BaseUser>) : T
+
         fun map(message: String) : T
     }
 

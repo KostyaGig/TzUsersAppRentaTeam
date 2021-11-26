@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ketodiet.plan.com.tzusersapprentateam.domain.UsersInteractor
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.state.UiUserStateCommunication
-import com.ketodiet.plan.com.tzusersapprentateam.presentation.state.UiUserToUiStateUserMapper
+import com.ketodiet.plan.com.tzusersapprentateam.presentation.state.UiUserToUiCacheStateUser
+import com.ketodiet.plan.com.tzusersapprentateam.presentation.state.UiUserToUiCommonStateUser
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.state.UiUsersToUiStateUserMapper
 import io.reactivex.disposables.CompositeDisposable
 
@@ -22,7 +23,8 @@ interface UsersViewModelFactory : ViewModelProvider.Factory {
                     DomainToUiUserMapper.Base()
                 ),
                 UiUsersToUiStateUserMapper.Base(
-                    UiUserToUiStateUserMapper.Base()
+                    UiUserToUiCommonStateUser.Base(),
+                    UiUserToUiCacheStateUser.Base()
                 ),
                 DisposableStore.Base(
                     CompositeDisposable()

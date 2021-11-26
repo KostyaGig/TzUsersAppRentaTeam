@@ -3,15 +3,12 @@ package com.ketodiet.plan.com.tzusersapprentateam.presentation.core
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.viewModels
+import com.ketodiet.plan.com.tzusersapprentateam.R
 import com.ketodiet.plan.com.tzusersapprentateam.core.UsersApp
 import com.ketodiet.plan.com.tzusersapprentateam.databinding.ActivityMainBinding
-import com.ketodiet.plan.com.tzusersapprentateam.presentation.UsersViewModel
-import com.ketodiet.plan.com.tzusersapprentateam.presentation.UsersViewModelFactory
-import com.ketodiet.plan.com.tzusersapprentateam.presentation.adapter.UsersAdapter
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.di.component.AppComponent
+import com.ketodiet.plan.com.tzusersapprentateam.presentation.fragment.UsersFragment
 import timber.log.Timber
-import javax.inject.Inject
 
 //todo remove later
 fun Any?.log(message: String) {
@@ -19,13 +16,6 @@ fun Any?.log(message: String) {
 }
 
 class MainActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var usersViewModelFactory: UsersViewModelFactory
-
-    private val usersViewModel: UsersViewModel by viewModels() {
-        usersViewModelFactory
-    }
 
     private var _binding: ActivityMainBinding? = null
     private val binding by lazy {
@@ -37,15 +27,13 @@ class MainActivity : AppCompatActivity() {
         component().inject(this)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(_binding?.root)
+        setSupportActionBar(binding.toolbar)
 
-        val adapter = UsersAdapter.Base()
-        binding.usersRecView.adapter = adapter
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container,UsersFragment()).commit()
 
-        usersViewModel.observe(this) { uiStateUser ->
-            adapter.update(uiStateUser)
-        }
-
-        usersViewModel.users()
+        //todo integrate nav graph with bottom nave
+        //todo create details fragment and fragment "About app"
+        // todo create simply README.md
     }
 
     private fun Activity.component() : AppComponent {

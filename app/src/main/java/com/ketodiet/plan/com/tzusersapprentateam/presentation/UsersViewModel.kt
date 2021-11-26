@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.ketodiet.plan.com.tzusersapprentateam.domain.UsersInteractor
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.core.Observe
-import com.ketodiet.plan.com.tzusersapprentateam.presentation.core.log
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.state.UiUserState
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.state.UiUserStateCommunication
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.state.UiUsersToUiStateUserMapper
@@ -13,6 +12,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 interface UsersViewModel : Observe<List<UiUserState>>, AddDisposable {
 
@@ -40,16 +40,19 @@ interface UsersViewModel : Observe<List<UiUserState>>, AddDisposable {
             }
             uiUserState
                 .subscribeOn(Schedulers.io())
+                .delay(DELAY.toLong(),TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { state ->
-                        log("view model subscribe list size ${state.size}")
                         communication.postValue(state)
                     },
                     {
-                        log("view model subscribe failure list ${it.message}")
                     }
                 ).add(disposableStore)
+        }
+
+        private companion object {
+            private const val DELAY = 1500
         }
 
         override fun observe(owner: LifecycleOwner, observer: Observer<List<UiUserState>>)

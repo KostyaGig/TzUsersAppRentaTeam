@@ -2,9 +2,9 @@ package com.ketodiet.plan.com.tzusersapprentateam.data
 
 import com.ketodiet.plan.com.tzusersapprentateam.core.Abstract
 
-interface CloudToDataUserMapper : Abstract.UserMapper<DataUser> {
+interface ToDataUserMapper : Abstract.UserMapper<DataUser> {
 
-    class Base : CloudToDataUserMapper {
+    class Base : ToDataUserMapper {
 
         override fun map(
             id: Int,

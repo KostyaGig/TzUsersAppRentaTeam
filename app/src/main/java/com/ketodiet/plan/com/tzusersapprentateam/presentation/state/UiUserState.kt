@@ -2,6 +2,7 @@ package com.ketodiet.plan.com.tzusersapprentateam.presentation.state
 
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.ActionBar
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.adapter.Bind
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.adapter.SameUiUserState
 import com.squareup.picasso.Picasso
@@ -18,6 +19,8 @@ sealed class UiUserState : SameUiUserState, Bind {
     override fun bind(errorText: TextView)
         = Unit
 
+    open fun handleTitleToolbar(actionBar: ActionBar) = Unit
+
     override fun bind(
         avatarImage: ImageView,
         firstNameText: TextView,
@@ -25,9 +28,16 @@ sealed class UiUserState : SameUiUserState, Bind {
         emailText: TextView
     ) = Unit
 
-    object Progress : UiUserState()
+    object Progress : UiUserState() {
 
-    class Base(
+        override fun handleTitleToolbar(actionBar: ActionBar) {
+            actionBar.title = TITLE_TOOLBAR
+        }
+
+        private const val TITLE_TOOLBAR = "Progress"
+    }
+
+    abstract class Base(
         private val id: Int,
         private val email: String,
         private val firstName: String,
@@ -54,6 +64,43 @@ sealed class UiUserState : SameUiUserState, Bind {
             emailText.text = email
         }
 
+        abstract fun titleToolbar() : String
+
+        override fun handleTitleToolbar(actionBar: ActionBar) {
+            actionBar.title = titleToolbar()
+        }
+    }
+
+    class Common(
+        private val id: Int,
+        private val email: String,
+        private val firstName: String,
+        private val lastName: String,
+        private val avatar: String
+    ) : Base(id, email, firstName, lastName, avatar) {
+
+        override fun titleToolbar(): String
+            = TITLE_TOOLBAR
+
+        private companion object {
+            private const val TITLE_TOOLBAR = "UserApp(Cloud)"
+        }
+    }
+
+    class Cache(
+        private val id: Int,
+        private val email: String,
+        private val firstName: String,
+        private val lastName: String,
+        private val avatar: String
+    ) : Base(id, email, firstName, lastName, avatar) {
+
+        override fun titleToolbar(): String
+            = TITLE_TOOLBAR
+
+        private companion object {
+            private const val TITLE_TOOLBAR = "UserApp(Cache)"
+        }
     }
 
     class Failure(
@@ -62,6 +109,14 @@ sealed class UiUserState : SameUiUserState, Bind {
 
         override fun bind(errorText: TextView) {
             errorText.text = message
+        }
+
+        override fun handleTitleToolbar(actionBar: ActionBar) {
+            actionBar.title = "$TITLE_TOOLBAR($message)"
+        }
+
+        private companion object {
+            private const val TITLE_TOOLBAR = "Failure"
         }
     }
 }

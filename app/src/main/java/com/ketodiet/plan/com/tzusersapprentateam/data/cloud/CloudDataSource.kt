@@ -1,6 +1,7 @@
 package com.ketodiet.plan.com.tzusersapprentateam.data.cloud
 
 import com.ketodiet.plan.com.tzusersapprentateam.core.BaseUser
+import com.ketodiet.plan.com.tzusersapprentateam.data.cache.CloudToCacheUserMapper
 import io.reactivex.Single
 
 interface CloudDataSource<T> {

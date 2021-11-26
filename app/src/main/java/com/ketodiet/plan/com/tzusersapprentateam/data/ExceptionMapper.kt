@@ -10,7 +10,30 @@ interface ExceptionMapper<T> {
 
     fun map(e: Exception) : T
 
+    fun map(e: Throwable) : T
+
     class Base(
+        private val resourceProvider: ResourceProvider
+    ) : ExceptionMapper<String> {
+
+        override fun map(e: Exception): String {
+            return when(e) {
+                is UnknownHostException -> resourceProvider.string(R.string.no_connection_text)
+                is HttpException -> resourceProvider.string(R.string.some_went_wrong_text)
+                else -> throw IllegalArgumentException("ExceptionMapper.Base not handle arg ${e.javaClass}, message ${e.message}")
+            }
+        }
+
+        override fun map(e: Throwable): String {
+            return when(e) {
+                is UnknownHostException -> resourceProvider.string(R.string.no_connection_text)
+                is HttpException -> resourceProvider.string(R.string.some_went_wrong_text)
+                else -> throw IllegalArgumentException("ExceptionMapper.Base not handle arg ${e.javaClass}, message ${e.message}")
+            }
+        }
+    }
+
+    class Test(
         private val resourceProvider: ResourceProvider
     ) : ExceptionMapper<String> {
 
@@ -21,13 +44,8 @@ interface ExceptionMapper<T> {
                 else -> throw IllegalArgumentException("ExceptionMapper.Base not handle arg ${e.javaClass}")
             }
         }
-    }
 
-    class Test(
-        private val resourceProvider: ResourceProvider
-    ) : ExceptionMapper<String> {
-
-        override fun map(e: Exception): String {
+        override fun map(e: Throwable): String {
             return when(e) {
                 is UnknownHostException -> resourceProvider.string(R.string.no_connection_text)
                 is HttpException -> resourceProvider.string(R.string.some_went_wrong_text)

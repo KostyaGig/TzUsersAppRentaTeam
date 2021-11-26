@@ -1,6 +1,5 @@
 package com.ketodiet.plan.com.tzusersapprentateam.data
 
-import com.google.gson.annotations.SerializedName
 import com.ketodiet.plan.com.tzusersapprentateam.core.Abstract
 import com.ketodiet.plan.com.tzusersapprentateam.core.BaseUser
 

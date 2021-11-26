@@ -2,9 +2,9 @@ package com.ketodiet.plan.com.tzusersapprentateam.presentation.state
 
 import com.ketodiet.plan.com.tzusersapprentateam.core.Abstract
 
-interface UiUserToUiStateUserMapper : Abstract.UserMapper<UiUserState> {
+interface UiUserToUiCacheStateUser : Abstract.UserMapper<UiUserState> {
 
-    class Base : UiUserToUiStateUserMapper {
+    class Base : UiUserToUiCacheStateUser {
 
         override fun map(
             id: Int,
@@ -13,7 +13,7 @@ interface UiUserToUiStateUserMapper : Abstract.UserMapper<UiUserState> {
             lastName: String,
             avatar: String
         ): UiUserState
-            = UiUserState.Base(
+            = UiUserState.Cache(
                 id, email, firstName, lastName, avatar
             )
 
