@@ -2,15 +2,33 @@ package com.ketodiet.plan.com.tzusersapprentateam.data
 
 import com.ketodiet.plan.com.tzusersapprentateam.core.BaseUser
 import com.ketodiet.plan.com.tzusersapprentateam.data.cloud.CloudDataSource
+import com.ketodiet.plan.com.tzusersapprentateam.data.cloud.CloudUser
 import io.reactivex.Single
 
 interface UsersRepository<T> {
 
     fun users() : T
 
-    class Base : UsersRepository<Single<DataUsers>> {
+    class Base(
+        private val cloudDataSource: CloudDataSource<Single<List<CloudUser>>>,
+        private val cloudToDataUserMapper: CloudToDataUserMapper,
+        private val exceptionMapper: ExceptionMapper<String>
+    ) : UsersRepository<Single<DataUsers>> {
+
         override fun users(): Single<DataUsers> {
-            TODO()
+            return try {
+                val cloudUsers = cloudDataSource.users()
+                return cloudUsers.flatMap { users ->
+                    val dataUsers = users.map { user ->
+                        user.map(cloudToDataUserMapper)
+                    }
+                    Single.just(DataUsers.Success(dataUsers))
+                }
+            } catch (e: Exception) {
+                val errorMessage = exceptionMapper.map(e)
+                Single.just(DataUsers.Failure(errorMessage))
+            }
+
         }
 
     }

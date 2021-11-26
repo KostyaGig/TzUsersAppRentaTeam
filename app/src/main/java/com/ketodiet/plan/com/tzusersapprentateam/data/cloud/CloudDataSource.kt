@@ -8,13 +8,13 @@ interface CloudDataSource<T> {
     fun users() : T
 
     class Base(
-        private val userService: UserService
+        private val userService: UsersService
     ) : CloudDataSource<Single<List<CloudUser>>> {
 
         override fun users(): Single<List<CloudUser>> {
             val cloudUsers = userService.users()
-            return cloudUsers.flatMap { cloudUsers ->
-                Single.just(cloudUsers.users())
+            return cloudUsers.flatMap { users ->
+                Single.just(users.users())
             }
         }
     }

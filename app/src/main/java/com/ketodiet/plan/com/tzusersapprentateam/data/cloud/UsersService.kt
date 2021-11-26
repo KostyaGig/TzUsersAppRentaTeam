@@ -7,8 +7,8 @@ import retrofit2.http.GET
  * Base url - https://reqres.in/api/
  * */
 
-interface UserService {
+interface UsersService {
 
     @GET("users")
-    fun users() : Single<CloudUsers>
+    fun users() : Single<CloudUsers.Base>
 }

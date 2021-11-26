@@ -8,15 +8,15 @@ interface CloudUser : BaseUser {
 
     data class Base(
         @SerializedName("id")
-        private val id: Int,
+        private val id: Int = -1,
         @SerializedName("email")
-        private val email: String,
+        private val email: String = "",
         @SerializedName("first_name")
-        private val firstName: String,
+        private val firstName: String = "",
         @SerializedName("last_name")
-        private val lastName: String,
+        private val lastName: String = "",
         @SerializedName("avatar")
-        private val avatar: String
+        private val avatar: String = ""
     ) : CloudUser {
 
         override fun <T> map(mapper: Abstract.UserMapper<T>): T
