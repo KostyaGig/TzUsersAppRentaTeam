@@ -38,5 +38,5 @@ SOLID,OOP,Clean architecture,JUnit tests<br/><br/>
 [UA03TestCases](https://github.com/KostyaGig/TzUsersAppRentaTeam/blob/master/app/src/main/java/com/ketodiet/plan/com/tzusersapprentateam/testcases/UA03_user_detail)<br/>
 
 ### Rest API
- - [BASE](https://reqres.in/api/)
+ - [BASE URL](https://reqres.in/api/)
  - [GET](https://reqres.in/api/users)
