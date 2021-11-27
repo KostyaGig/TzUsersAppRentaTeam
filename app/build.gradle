@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'androidx.navigation.safeargs.kotlin'
+    id 'org.jetbrains.kotlin.android.extensions'
 }
 
 android {
@@ -36,6 +36,10 @@ android {
 
     viewBinding {
         enabled = true
+    }
+
+    androidExtensions {
+        experimental = true
     }
 }
 
@@ -76,13 +80,6 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.0.6'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
-
-
-    //navigation
-    def nav_version = "2.3.5"
-
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

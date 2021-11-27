@@ -5,10 +5,15 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.ketodiet.plan.com.tzusersapprentateam.R
 import com.ketodiet.plan.com.tzusersapprentateam.databinding.UsersFragmentBinding
+import com.ketodiet.plan.com.tzusersapprentateam.presentation.ClickedUser
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.UsersViewModel
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.UsersViewModelFactory
+import com.ketodiet.plan.com.tzusersapprentateam.presentation.adapter.OnItemClickListener
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.adapter.UsersAdapter
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.core.BaseFragment
+import com.ketodiet.plan.com.tzusersapprentateam.presentation.core.log
+import com.ketodiet.plan.com.tzusersapprentateam.presentation.nav.ExitActivity
+import com.ketodiet.plan.com.tzusersapprentateam.presentation.nav.Navigator
 import javax.inject.Inject
 
 class UsersFragment : BaseFragment(R.layout.users_fragment) {
@@ -33,7 +38,19 @@ class UsersFragment : BaseFragment(R.layout.users_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = UsersFragmentBinding.bind(view)
 
-        val adapter = UsersAdapter.Base()
+        val adapter = UsersAdapter.Base(object : OnItemClickListener {
+
+            override fun onItemClick(user: ClickedUser) {
+                val bundle = Bundle().apply {
+                    putParcelable(USER_KEY,user)
+                }
+
+                val fragment = UserDetailFragment()
+                fragment.arguments = bundle
+
+                (requireActivity() as Navigator).navigateTo(fragment)
+            }
+        })
         binding.usersRecView.adapter = adapter
 
         usersViewModel.observe(this) { uiStateUser ->
@@ -43,4 +60,8 @@ class UsersFragment : BaseFragment(R.layout.users_fragment) {
 
         usersViewModel.users()
     }
+
+    override fun navigateToBack()
+        = (requireActivity() as ExitActivity).exit()
+
 }

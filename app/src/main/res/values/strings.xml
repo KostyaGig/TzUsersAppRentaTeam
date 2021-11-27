@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">TzUsersApp(RentaTeam)</string>
+    <string name="app_name">TzUsersApp</string>
     <string name="no_connection_text">No connection</string>
     <string name="some_went_wrong_text">Some went wrong</string>
+    <string name="tz_for_renta_team_text">Тестовое задание для Rentateam</string>
+    <string name="users_text">Users</string>
+    <string name="about_program_text">About program</string>
 </resources>

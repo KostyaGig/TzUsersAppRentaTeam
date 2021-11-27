@@ -1,14 +1,17 @@
 package com.ketodiet.plan.com.tzusersapprentateam.presentation.state
 
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
+import com.ketodiet.plan.com.tzusersapprentateam.core.Abstract
+import com.ketodiet.plan.com.tzusersapprentateam.presentation.ToClickedUserMapper
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.adapter.Bind
+import com.ketodiet.plan.com.tzusersapprentateam.presentation.adapter.OnItemClickListener
 import com.ketodiet.plan.com.tzusersapprentateam.presentation.adapter.SameUiUserState
-import com.squareup.picasso.Picasso
 
-sealed class UiUserState : SameUiUserState, Bind {
+sealed class UiUserState : Abstract.User,SameUiUserState, Bind {
 
+    override fun <T> map(mapper: Abstract.UserMapper<T>): T
+        = mapper.map(-1,"","","","")
 
     override fun sameId(item: UiUserState): Boolean = false
     override fun same(item: UiUserState): Boolean = false
@@ -19,14 +22,14 @@ sealed class UiUserState : SameUiUserState, Bind {
     override fun bind(errorText: TextView)
         = Unit
 
+    override fun bind(
+        firstNameText: TextView,
+        lastNameText: TextView
+    ) = Unit
+
     open fun handleTitleToolbar(actionBar: ActionBar) = Unit
 
-    override fun bind(
-        avatarImage: ImageView,
-        firstNameText: TextView,
-        lastNameText: TextView,
-        emailText: TextView
-    ) = Unit
+    open fun onItemClick(onItemClickListener: OnItemClickListener) = Unit
 
     object Progress : UiUserState() {
 
@@ -34,7 +37,7 @@ sealed class UiUserState : SameUiUserState, Bind {
             actionBar.title = TITLE_TOOLBAR
         }
 
-        private const val TITLE_TOOLBAR = "Progress"
+        private const val TITLE_TOOLBAR = "Progress..."
     }
 
     abstract class Base(
@@ -57,26 +60,33 @@ sealed class UiUserState : SameUiUserState, Bind {
         override fun same(email: String, firstName: String): Boolean
             = this.email == email && this.firstName == firstName
 
-        override fun bind(avatarImage: ImageView,firstNameText: TextView,lastNameText: TextView,emailText: TextView) {
-            Picasso.get().load(avatar).into(avatarImage)
+        override fun bind(firstNameText: TextView, lastNameText: TextView) {
             firstNameText.text = firstName
             lastNameText.text = lastName
-            emailText.text = email
         }
 
         abstract fun titleToolbar() : String
 
+        override fun <T> map(mapper: Abstract.UserMapper<T>): T
+            = mapper.map(id, email, firstName, lastName, avatar)
+
         override fun handleTitleToolbar(actionBar: ActionBar) {
             actionBar.title = titleToolbar()
+        }
+
+        override fun onItemClick(onItemClickListener: OnItemClickListener) {
+            onItemClickListener.onItemClick(
+                map(ToClickedUserMapper.Base())
+            )
         }
     }
 
     class Common(
-        private val id: Int,
-        private val email: String,
-        private val firstName: String,
-        private val lastName: String,
-        private val avatar: String
+        id: Int,
+        email: String,
+        firstName: String,
+        lastName: String,
+        avatar: String
     ) : Base(id, email, firstName, lastName, avatar) {
 
         override fun titleToolbar(): String
@@ -88,11 +98,11 @@ sealed class UiUserState : SameUiUserState, Bind {
     }
 
     class Cache(
-        private val id: Int,
-        private val email: String,
-        private val firstName: String,
-        private val lastName: String,
-        private val avatar: String
+        id: Int,
+        email: String,
+        firstName: String,
+        lastName: String,
+        avatar: String
     ) : Base(id, email, firstName, lastName, avatar) {
 
         override fun titleToolbar(): String

@@ -4,7 +4,7 @@ import android.widget.ImageView
 import android.widget.TextView
 
 interface Bind {
-    fun bind(avatarImage: ImageView, firstNameText: TextView, lastNameText: TextView, emailText: TextView)
+    fun bind(firstNameText: TextView, lastNameText: TextView)
 
     fun bind(errorText: TextView)
 }

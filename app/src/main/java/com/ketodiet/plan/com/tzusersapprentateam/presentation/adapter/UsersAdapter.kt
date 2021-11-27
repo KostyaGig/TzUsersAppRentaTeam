@@ -14,7 +14,9 @@ interface UsersAdapter {
 
     fun update(newList: List<UiUserState>)
 
-    class Base: UsersAdapter, RecyclerView.Adapter<Base.ViewHolder>() {
+    class Base(
+        private val onItemClickListener: OnItemClickListener
+    ) : UsersAdapter, RecyclerView.Adapter<Base.ViewHolder>() {
 
         private val users = ArrayList<UiUserState>()
 
@@ -55,7 +57,8 @@ interface UsersAdapter {
                         LayoutInflater.from(parent.context),
                         parent,
                         false
-                    )
+                    ),
+                    onItemClickListener
                 )
                 else -> ViewHolder.Failure(
                     FailureItemBinding.inflate(
@@ -83,11 +86,18 @@ interface UsersAdapter {
 
             class Progress(view: ProgressItemBinding) : ViewHolder(view.root)
 
-            class Base(private val view: UserItemBinding) : ViewHolder(view.root) {
+            class Base(
+                private val view: UserItemBinding,
+                private val onItemClickListener: OnItemClickListener
+                ) : ViewHolder(view.root) {
 
-                override fun bind(user: UiUserState) {
-                    user.bind(view.avatarImage,view.firstNameTv,view.lastNameTv,view.emailTv)
-                }
+                    override fun bind(user: UiUserState) {
+                        user.bind(view.firstNameTv,view.lastNameTv)
+
+                        view.root.setOnClickListener {
+                            user.onItemClick(onItemClickListener)
+                        }
+                    }
             }
             class Failure(private val view: FailureItemBinding) : ViewHolder(view.root) {
 
